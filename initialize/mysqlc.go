@@ -8,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// TODO init mysql
 func MysqlC() *sql.DB {
 	dsn := "root:123456@tcp(127.0.0.1:3306)/onlinedb"
 	if db, err := sql.Open("mysql", dsn); err != nil {
