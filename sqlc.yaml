@@ -1,0 +1,13 @@
+version: "2"
+sql:
+- schema: "/database/migration/schema.sql"
+  queries: "/database/query/anime.sql"
+  engine: "mysql"
+  gen:
+    go: 
+      package: "models"
+      out: "/database/models"
+      sql_package: "database/sql"
+      emit_json_tags: true
+      emit_interface: true
+      emit_empty_slices: true
