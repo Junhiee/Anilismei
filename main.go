@@ -4,10 +4,14 @@ import (
 	"net/http"
 	"time"
 
+	"git.virjar.com/Junhiee/anilismei/initialize"
 	"git.virjar.com/Junhiee/anilismei/router"
 )
 
 func main() {
+
+	initialize.SetupMysql()
+
 	r := router.Routers()
 
 	s := &http.Server{

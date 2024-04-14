@@ -10,7 +10,7 @@ func Routers() *gin.Engine {
 	router.Use(gin.Recovery())
 	router.Use(gin.Logger())
 	
-	api_beta := router.Group("/router/api/beta")
+	api_beta := router.Group("/api/beta")
 	{
 		api_beta.GET("/anime", beta.GetAnime)
 		api_beta.POST("/anime", beta.AddAnime)
