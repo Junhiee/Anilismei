@@ -1,21 +1,35 @@
 package router
 
 import (
+	"time"
+
+	"git.virjar.com/Junhiee/anilismei/global"
 	"git.virjar.com/Junhiee/anilismei/router/api/beta"
+	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 )
 
+type RoterGroup struct {
+	beta.AnimeRouter
+}
+
+var RoterGroups = new(RoterGroup)
+
 func Routers() *gin.Engine {
 	router := gin.New()
-	router.Use(gin.Recovery())
+
+	router.Use(ginzap.Ginzap(global.ZLOG, time.RFC3339, true))
+	router.Use(ginzap.RecoveryWithZap(global.ZLOG, true))
 	router.Use(gin.Logger())
-	
-	api_beta := router.Group("/api/beta")
+	router.Use(gin.Recovery())
+
+	api_beta := router.Group("/api/beta/anime")
 	{
-		api_beta.GET("/anime", beta.GetAnime)
-		api_beta.POST("/anime", beta.AddAnime)
-		api_beta.PUT("/anime:id", beta.UpdateAnime)
-		api_beta.DELETE("/anime:id", beta.DeleteAnime)
+		api_beta.GET(":anime_id", RoterGroups.GetAnime)
+		api_beta.GET("/", RoterGroups.GetListAnimes)
+		api_beta.POST("/", RoterGroups.AddAnime)
+		api_beta.PUT("/:id", RoterGroups.UpdateAnime)
+		api_beta.DELETE("/:id", RoterGroups.DeleteAnime)
 	}
 
 	return router
