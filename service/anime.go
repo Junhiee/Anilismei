@@ -5,8 +5,9 @@ import (
 	"database/sql"
 	"time"
 
+	db "git.virjar.com/Junhiee/anilismei/database"
 	"git.virjar.com/Junhiee/anilismei/database/models"
-	"git.virjar.com/Junhiee/anilismei/global"
+	"git.virjar.com/Junhiee/anilismei/pkg/log"
 	"go.uber.org/zap"
 )
 
@@ -37,9 +38,9 @@ func (s *AnimeService) Add(a Animation) error {
 		Rating:      sql.NullString{String: a.Rating, Valid: true},
 	}
 
-	err := global.G_QRY.AddAnime(context.Background(), anime)
+	err := db.G_QRY.AddAnime(context.Background(), anime)
 	if err != nil {
-		global.ZLOG.Error("Add anime err:", zap.Error(err))
+		log.ZLOG.Error("Add anime err:", zap.Error(err))
 	}
 
 	return err
@@ -47,9 +48,9 @@ func (s *AnimeService) Add(a Animation) error {
 
 func (s *AnimeService) Get(anime_id int64) (*models.Animation, error) {
 
-	res, err := global.G_QRY.GetAnime(context.Background(), anime_id)
+	res, err := db.G_QRY.GetAnime(context.Background(), anime_id)
 	if err != nil {
-		global.ZLOG.Error("Get anime err:", zap.Error(err))
+		log.ZLOG.Error("Get anime err:", zap.Error(err))
 		return nil, err
 	}
 	return &res, err
@@ -60,7 +61,7 @@ func (s *AnimeService) GetList(limit int32, offset int32) ([]models.Animation, e
 		Limit:  limit,
 		Offset: offset,
 	}
-	res, err := global.G_QRY.GetListAnimes(context.Background(), params)
+	res, err := db.G_QRY.GetListAnimes(context.Background(), params)
 	if err != nil {
 		return nil, err
 	}
@@ -79,12 +80,12 @@ func (s *AnimeService) Update(a Animation) error {
 		Rating:      sql.NullString{String: a.Rating, Valid: true},
 	}
 
-	err := global.G_QRY.UpdateAnime(context.Background(), params)
+	err := db.G_QRY.UpdateAnime(context.Background(), params)
 	
 	return err
 }
 
 func (s *AnimeService) Delete(aid int64) error {
-	err := global.G_QRY.DeleteAnime(context.Background(), aid)
+	err := db.G_QRY.DeleteAnime(context.Background(), aid)
 	return err
 }

@@ -3,13 +3,12 @@ package log
 import (
 	"io"
 
-	"git.virjar.com/Junhiee/anilismei/global"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-// init conig
+var ZLOG *zap.Logger
 
 type ZapEncConfig struct {
 }
@@ -49,5 +48,5 @@ func InitLogger() {
 	ws := zapcore.AddSync(NewGinZapwriteSyncer())
 	lv := zapcore.DebugLevel
 	core := zapcore.NewCore(enc, ws, lv)
-	global.ZLOG = zap.New(core)
+	ZLOG = zap.New(core)
 }

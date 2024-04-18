@@ -3,7 +3,7 @@ package router
 import (
 	"time"
 
-	"git.virjar.com/Junhiee/anilismei/global"
+	"git.virjar.com/Junhiee/anilismei/pkg/log"
 	"git.virjar.com/Junhiee/anilismei/router/api/beta"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
@@ -18,8 +18,8 @@ var RoterGroups = new(RoterGroup)
 func Routers() *gin.Engine {
 	router := gin.New()
 
-	router.Use(ginzap.Ginzap(global.ZLOG, time.RFC3339, true))
-	router.Use(ginzap.RecoveryWithZap(global.ZLOG, true))
+	router.Use(ginzap.Ginzap(log.ZLOG, time.RFC3339, true))
+	router.Use(ginzap.RecoveryWithZap(log.ZLOG, true))
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
