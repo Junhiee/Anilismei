@@ -1,0 +1,18 @@
+[mysql]
+user = "root"
+host = "localhost"
+port = 3306
+password = 123456
+database = "anilisme"
+
+
+[server]
+port = 8081
+
+[log]
+filename = "./log/zap.log"  # 日志文件输出位置
+maxsize = 10                # 文件最大缓存
+maxbackup = 5   
+maxage = 30
+conmpress = false           # 是否压缩
+
