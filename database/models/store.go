@@ -1,31 +1,29 @@
-package datebase
+package models
 
 import (
 	"context"
 	"database/sql"
 	"fmt"
-
-	"git.virjar.com/Junhiee/anilismei/database/models"
 )
 
 type Store struct {
-	*models.Queries
+	*Queries
 	db *sql.DB
 }
 
 func NewStore(db *sql.DB) *Store {
 	return &Store{
 		db:      db,
-		Queries: models.New(db),
+		Queries: New(db),
 	}
 }
 
-func (store *Store) ExecTx(ctx context.Context, fn func(*models.Queries) error) error {
+func (store *Store) ExecTx(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
-	q := models.New(tx)
+	q := New(tx)
 	err = fn(q)
 
 	if err != nil {

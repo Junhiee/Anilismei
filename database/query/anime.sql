@@ -1,6 +1,6 @@
 -- name: GetListAnimes :many
-SELECT * FROM animations
-ORDER BY rating;
+SELECT * FROM animations 
+LIMIT ? OFFSET ?;
 
 -- name: GetAnime :one
 SELECT * FROM animations

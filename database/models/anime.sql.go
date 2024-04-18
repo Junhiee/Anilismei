@@ -72,12 +72,17 @@ func (q *Queries) GetAnime(ctx context.Context, animeID int64) (Animation, error
 }
 
 const getListAnimes = `-- name: GetListAnimes :many
-SELECT anime_id, title, evaluate, genre_id, release_date, studio_id, anime_status, rating FROM animations
-ORDER BY rating
+SELECT anime_id, title, evaluate, genre_id, release_date, studio_id, anime_status, rating FROM animations 
+LIMIT ? OFFSET ?
 `
 
-func (q *Queries) GetListAnimes(ctx context.Context) ([]Animation, error) {
-	rows, err := q.db.QueryContext(ctx, getListAnimes)
+type GetListAnimesParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) GetListAnimes(ctx context.Context, arg GetListAnimesParams) ([]Animation, error) {
+	rows, err := q.db.QueryContext(ctx, getListAnimes, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

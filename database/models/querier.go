@@ -12,7 +12,7 @@ type Querier interface {
 	AddAnime(ctx context.Context, arg AddAnimeParams) error
 	DeleteAnime(ctx context.Context, animeID int64) error
 	GetAnime(ctx context.Context, animeID int64) (Animation, error)
-	GetListAnimes(ctx context.Context) ([]Animation, error)
+	GetListAnimes(ctx context.Context, arg GetListAnimesParams) ([]Animation, error)
 	UpdateAnime(ctx context.Context, arg UpdateAnimeParams) error
 }
 
