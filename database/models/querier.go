@@ -8,7 +8,6 @@ import (
 	"context"
 )
 
-
 type Querier interface {
 	AddAnime(ctx context.Context, arg AddAnimeParams) error
 	DeleteAnime(ctx context.Context, animeID int64) error

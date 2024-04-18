@@ -11,7 +11,6 @@ import (
 	"time"
 )
 
-
 type AnimationsAnimeStatus string
 
 const (

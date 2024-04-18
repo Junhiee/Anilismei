@@ -6,7 +6,6 @@ import (
 	"fmt"
 )
 
-
 type Store struct {
 	*Queries
 	db *sql.DB

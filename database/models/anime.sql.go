@@ -50,7 +50,6 @@ func (q *Queries) DeleteAnime(ctx context.Context, animeID int64) error {
 	return err
 }
 
-
 const getAnime = `-- name: GetAnime :one
 SELECT anime_id, title, evaluate, genre_id, release_date, studio_id, anime_status, rating FROM animations
 WHERE anime_id = ?
