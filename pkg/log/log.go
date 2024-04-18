@@ -3,6 +3,7 @@ package log
 import (
 	"io"
 
+	"git.virjar.com/Junhiee/anilismei/global"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -33,7 +34,7 @@ func NewGinZapEncoderConfig() zapcore.EncoderConfig {
 func NewGinZapwriteSyncer() io.Writer {
 
 	lumberJackLogger := &lumberjack.Logger{
-		Filename:   "./log/v1/zap.log",
+		Filename:   "./log/zap.log",
 		MaxSize:    10,
 		MaxBackups: 5,
 		MaxAge:     30,
@@ -43,11 +44,10 @@ func NewGinZapwriteSyncer() io.Writer {
 
 }
 
-func InitLogger() *zap.Logger {
+func InitLogger() {
 	enc := zapcore.NewJSONEncoder(NewGinZapEncoderConfig())
 	ws := zapcore.AddSync(NewGinZapwriteSyncer())
 	lv := zapcore.DebugLevel
 	core := zapcore.NewCore(enc, ws, lv)
-	logger := zap.New(core, nil)
-	return logger
+	global.ZLOG = zap.New(core)
 }
