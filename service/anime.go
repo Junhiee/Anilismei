@@ -3,30 +3,88 @@ package service
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"time"
 
 	"git.virjar.com/Junhiee/anilismei/database/models"
 	"git.virjar.com/Junhiee/anilismei/global"
+	"go.uber.org/zap"
 )
 
-func Add() (err error) {
+type AnimeService struct{}
+
+// var AnimeServer = new(AnimeService)
+
+type Animation struct {
+	AnimeID     int64
+	Title       string
+	Evaluate    string
+	GenreID     int32
+	ReleaseDate time.Time
+	StudioID    int32
+	AnimeStatus string
+	Rating      string
+}
+
+func (s *AnimeService) Add(a Animation) error {
 	anime := models.AddAnimeParams{
-		AnimeID:     10004,
-		Title:       "Test Anime",
-		Evaluate:    "Great",
-		GenreID:     10003,
-		ReleaseDate: sql.NullTime{Time: time.Now(), Valid: true},
-		StudioID:    10004,
-		AnimeStatus: models.NullAnimationsAnimeStatus{AnimationsAnimeStatus: "completed", Valid: true},
-		Rating:      sql.NullString{String: "6", Valid: true},
+		AnimeID:     a.AnimeID,
+		Title:       a.Title,
+		Evaluate:    a.Evaluate,
+		GenreID:     a.GenreID,
+		ReleaseDate: sql.NullTime{Time: a.ReleaseDate, Valid: true},
+		StudioID:    a.StudioID,
+		AnimeStatus: models.NullAnimationsAnimeStatus{AnimationsAnimeStatus: models.AnimationsAnimeStatus(a.AnimeStatus), Valid: true},
+		Rating:      sql.NullString{String: a.Rating, Valid: true},
 	}
 
-	err = global.G_QRY.AddAnime(context.Background(), anime)
+	err := global.G_QRY.AddAnime(context.Background(), anime)
 	if err != nil {
-		fmt.Println(err)
+		global.ZLOG.Error("Add anime err:", zap.Error(err))
 	}
 
 	return err
+}
 
+func (s *AnimeService) Get(anime_id int64) (*models.Animation, error) {
+
+	res, err := global.G_QRY.GetAnime(context.Background(), anime_id)
+	if err != nil {
+		global.ZLOG.Error("Get anime err:", zap.Error(err))
+		return nil, err
+	}
+	return &res, err
+}
+
+func (s *AnimeService) GetList(limit int32, offset int32) ([]models.Animation, error) {
+	params := models.GetListAnimesParams{
+		Limit:  limit,
+		Offset: offset,
+	}
+	res, err := global.G_QRY.GetListAnimes(context.Background(), params)
+	if err != nil {
+		return nil, err
+	}
+	return res, err
+}
+
+func (s *AnimeService) Update(a Animation) error {
+	params := models.UpdateAnimeParams{
+		AnimeID:     a.AnimeID,
+		Title:       a.Title,
+		Evaluate:    a.Evaluate,
+		GenreID:     a.GenreID,
+		ReleaseDate: sql.NullTime{Time: a.ReleaseDate, Valid: true},
+		StudioID:    a.StudioID,
+		AnimeStatus: models.NullAnimationsAnimeStatus{AnimationsAnimeStatus: models.AnimationsAnimeStatus(a.AnimeStatus), Valid: true},
+		Rating:      sql.NullString{String: a.Rating, Valid: true},
+	}
+
+	err := global.G_QRY.UpdateAnime(context.Background(), params)
+	
+	return err
+}
+
+func (s *AnimeService) Delete(aid int64) error {
+	err := global.G_QRY.DeleteAnime(context.Background(), aid)
+	return err
 }
