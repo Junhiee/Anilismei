@@ -18,6 +18,7 @@ func SetupMysql() {
 		return
 	}
 
+	
 	db.SetMaxOpenConns(64)
 	db.SetMaxIdleConns(64)
 	db.SetConnMaxLifetime(5 * time.Minute)

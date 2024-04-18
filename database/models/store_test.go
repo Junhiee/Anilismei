@@ -10,6 +10,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+
 var q *Store
 
 func SetupMysql() {
