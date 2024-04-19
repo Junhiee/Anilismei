@@ -4,17 +4,17 @@ import (
 	"net/http"
 	"time"
 
-	"git.virjar.com/Junhiee/anilismei/configs"
 	db "git.virjar.com/Junhiee/anilismei/database"
+	"git.virjar.com/Junhiee/anilismei/pkg/config"
 	"git.virjar.com/Junhiee/anilismei/pkg/log"
 	"git.virjar.com/Junhiee/anilismei/router"
 )
 
 func main() {
 
-	db.SetupMysql() // 初始化数据库
-	log.InitLogger() // 初始化日志服务
-	configs.InitConfig() // 初始化配置文件
+	db.SetupMysql()     // 初始化数据库
+	log.InitLogger()    // 初始化日志服务
+	config.InitConfig() // 初始化配置文件
 
 	r := router.Routers()
 	s := &http.Server{
