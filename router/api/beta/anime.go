@@ -3,11 +3,13 @@ package beta
 import (
 	"fmt"
 	"net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
 
 	"git.virjar.com/Junhiee/anilismei/pkg/e"
 	s "git.virjar.com/Junhiee/anilismei/service"
 	resp "git.virjar.com/Junhiee/anilismei/utils/response"
-	"github.com/gin-gonic/gin"
 )
 
 type AnimeRouter struct{}
@@ -26,7 +28,7 @@ func (a *AnimeRouter) GetListAnimes(ctx *gin.Context) {
 		return
 	}
 
-	data, err := s.Server.GetList(req.Size, req.Page*5)
+	data, err := s.Server.GetListAnimes(req.Size, req.Page*5)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -51,11 +53,7 @@ func (a *AnimeRouter) GetAnime(ctx *gin.Context) {
 		return
 	}
 
-	data, err := s.Server.Get(req.AnimeID)
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	data, _ := s.Server.GetAnime(req.AnimeID)
 
 	resp.Response(
 		ctx,
@@ -67,7 +65,35 @@ func (a *AnimeRouter) GetAnime(ctx *gin.Context) {
 
 // 添加一个 Anime 信息
 func (a *AnimeRouter) AddAnime(ctx *gin.Context) {
-	
+	data := s.Animation{
+		AnimeID:     10001,
+		Title:       "Linux Title",
+		Evaluate:    "Add Anime 1",
+		GenreID:     10001,
+		ReleaseDate: time.Now(),
+		StudioID:    10001,
+		AnimeStatus: "completed",
+		Rating:      9.2,
+	}
+	err := s.Server.AddAnime(data)
+
+	if err != nil {
+		resp.Response(
+			ctx,
+			http.StatusBadRequest,
+			e.ERROR_DB,
+			nil,
+		)
+		return
+	}
+
+	resp.Response(
+		ctx,
+		http.StatusOK,
+		e.SUCCESS,
+		data,
+	)
+
 }
 
 // 更新一个 Anime 信息

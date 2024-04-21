@@ -9,11 +9,11 @@ CREATE TABLE `animations` (
 	-- 外键-动画类型表
 	`genre_id` INT NOT NULL,
 	-- 更新日期
-	`release_date` DATE,
+	`release_date` TIMESTAMP,
 	`studio_id` INT NOT NULL,
 	`anime_status` ENUM("airing", "completed", "paused"),
 	-- 评分
-	`rating` DECIMAL,
+	`rating` FLOAT,
 	PRIMARY KEY(`anime_id`)
 );
 
@@ -58,7 +58,7 @@ CREATE TABLE `users` (
 	`user_id` BIGINT NOT NULL AUTO_INCREMENT UNIQUE,
 	`user_name` VARCHAR(255) NOT NULL UNIQUE,
 	`email` VARCHAR(255) NOT NULL,
-	`password` VARCHAR(255) NOT NULL,
+	`user_pwd` VARCHAR(255) NOT NULL,
 	`avatar_url` VARCHAR(255),
 	PRIMARY KEY(`user_id`)
 );
@@ -71,7 +71,7 @@ CREATE TABLE `subscriptions` (
 	`subscription_id` INT NOT NULL AUTO_INCREMENT UNIQUE,
 	`user_id` BIGINT NOT NULL,
 	`anime_id` BIGINT NOT NULL,
-	`subscription_date` DATE NOT NULL,
+	`subscription_date` TIMESTAMP NOT NULL,
 	PRIMARY KEY(`subscription_id`)
 );
 
@@ -83,7 +83,7 @@ CREATE TABLE `comment` (
 	`comment_id` BIGINT NOT NULL AUTO_INCREMENT UNIQUE,
 	`anime_id` BIGINT NOT NULL,
 	`comment_text` TEXT(65535) NOT NULL,
-	`comment_date` DATE NOT NULL,
+	`comment_date` TIMESTAMP NOT NULL,
 	PRIMARY KEY(`comment_id`)
 );
 

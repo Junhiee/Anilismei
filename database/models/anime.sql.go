@@ -23,7 +23,7 @@ type AddAnimeParams struct {
 	ReleaseDate sql.NullTime              `json:"release_date"`
 	StudioID    int32                     `json:"studio_id"`
 	AnimeStatus NullAnimationsAnimeStatus `json:"anime_status"`
-	Rating      sql.NullString            `json:"rating"`
+	Rating      sql.NullFloat64           `json:"rating"`
 }
 
 func (q *Queries) AddAnime(ctx context.Context, arg AddAnimeParams) error {
@@ -126,7 +126,7 @@ type UpdateAnimeParams struct {
 	ReleaseDate sql.NullTime              `json:"release_date"`
 	StudioID    int32                     `json:"studio_id"`
 	AnimeStatus NullAnimationsAnimeStatus `json:"anime_status"`
-	Rating      sql.NullString            `json:"rating"`
+	Rating      sql.NullFloat64           `json:"rating"`
 	AnimeID     int64                     `json:"anime_id"`
 }
 

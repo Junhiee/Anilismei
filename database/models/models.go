@@ -62,7 +62,7 @@ type Animation struct {
 	ReleaseDate sql.NullTime              `json:"release_date"`
 	StudioID    int32                     `json:"studio_id"`
 	AnimeStatus NullAnimationsAnimeStatus `json:"anime_status"`
-	Rating      sql.NullString            `json:"rating"`
+	Rating      sql.NullFloat64           `json:"rating"`
 }
 
 type Comment struct {
@@ -100,6 +100,6 @@ type User struct {
 	UserID    int64          `json:"user_id"`
 	UserName  string         `json:"user_name"`
 	Email     string         `json:"email"`
-	Password  string         `json:"password"`
+	UserPwd   string         `json:"user_pwd"`
 	AvatarUrl sql.NullString `json:"avatar_url"`
 }

@@ -1,7 +1,7 @@
 version: "2"
 sql:
 - schema: "/database/migration/schema.sql"
-  queries: "/database/query/anime.sql"
+  queries: "/database/query/"
   engine: "mysql"
   gen:
     go: 

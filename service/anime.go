@@ -5,15 +5,16 @@ import (
 	"database/sql"
 	"time"
 
+	"go.uber.org/zap"
+
 	db "git.virjar.com/Junhiee/anilismei/database"
 	"git.virjar.com/Junhiee/anilismei/database/models"
 	"git.virjar.com/Junhiee/anilismei/pkg/log"
-	"go.uber.org/zap"
 )
 
 type AnimeService struct{}
 
-// var AnimeServer = new(AnimeService)
+var AnimeServer = new(AnimeService)
 
 type Animation struct {
 	AnimeID     int64
@@ -23,10 +24,10 @@ type Animation struct {
 	ReleaseDate time.Time
 	StudioID    int32
 	AnimeStatus string
-	Rating      string
+	Rating      float64
 }
 
-func (s *AnimeService) Add(a Animation) error {
+func (s *AnimeService) AddAnime(a Animation) error {
 	anime := models.AddAnimeParams{
 		AnimeID:     a.AnimeID,
 		Title:       a.Title,
@@ -35,28 +36,28 @@ func (s *AnimeService) Add(a Animation) error {
 		ReleaseDate: sql.NullTime{Time: a.ReleaseDate, Valid: true},
 		StudioID:    a.StudioID,
 		AnimeStatus: models.NullAnimationsAnimeStatus{AnimationsAnimeStatus: models.AnimationsAnimeStatus(a.AnimeStatus), Valid: true},
-		Rating:      sql.NullString{String: a.Rating, Valid: true},
+		Rating:      sql.NullFloat64{Float64: a.Rating, Valid: true},
 	}
 
 	err := db.G_QRY.AddAnime(context.Background(), anime)
 	if err != nil {
-		log.ZLOG.Error("Add anime err:", zap.Error(err))
+		log.ZLOG.Error("DB insert anime err", zap.Error(err))
 	}
 
 	return err
 }
 
-func (s *AnimeService) Get(anime_id int64) (*models.Animation, error) {
+func (s *AnimeService) GetAnime(anime_id int64) (*models.Animation, error) {
 
 	res, err := db.G_QRY.GetAnime(context.Background(), anime_id)
 	if err != nil {
-		log.ZLOG.Error("Get anime err:", zap.Error(err))
+		log.ZLOG.Error("Get anime err", zap.Error(err))
 		return nil, err
 	}
 	return &res, err
 }
 
-func (s *AnimeService) GetList(limit int32, offset int32) ([]models.Animation, error) {
+func (s *AnimeService) GetListAnimes(limit int32, offset int32) ([]models.Animation, error) {
 	params := models.GetListAnimesParams{
 		Limit:  limit,
 		Offset: offset,
@@ -68,7 +69,7 @@ func (s *AnimeService) GetList(limit int32, offset int32) ([]models.Animation, e
 	return res, err
 }
 
-func (s *AnimeService) Update(a Animation) error {
+func (s *AnimeService) UpdateAnime(a Animation) error {
 	params := models.UpdateAnimeParams{
 		AnimeID:     a.AnimeID,
 		Title:       a.Title,
@@ -77,15 +78,15 @@ func (s *AnimeService) Update(a Animation) error {
 		ReleaseDate: sql.NullTime{Time: a.ReleaseDate, Valid: true},
 		StudioID:    a.StudioID,
 		AnimeStatus: models.NullAnimationsAnimeStatus{AnimationsAnimeStatus: models.AnimationsAnimeStatus(a.AnimeStatus), Valid: true},
-		Rating:      sql.NullString{String: a.Rating, Valid: true},
+		Rating:      sql.NullFloat64{Float64: a.Rating, Valid: true},
 	}
 
 	err := db.G_QRY.UpdateAnime(context.Background(), params)
-	
+
 	return err
 }
 
-func (s *AnimeService) Delete(aid int64) error {
+func (s *AnimeService) DeleteAnime(aid int64) error {
 	err := db.G_QRY.DeleteAnime(context.Background(), aid)
 	return err
 }
