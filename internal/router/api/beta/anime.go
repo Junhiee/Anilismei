@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"git.virjar.com/Junhiee/anilismei/pkg/e"
-	s "git.virjar.com/Junhiee/anilismei/service"
-	resp "git.virjar.com/Junhiee/anilismei/utils/response"
+	s "git.virjar.com/Junhiee/anilismei/internal/service"
+	e "git.virjar.com/Junhiee/anilismei/pkg/errors"
+	resp "git.virjar.com/Junhiee/anilismei/tools/response"
 )
 
 type AnimeRouter struct{}

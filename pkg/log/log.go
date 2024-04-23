@@ -33,7 +33,7 @@ func NewGinZapEncoderConfig() zapcore.EncoderConfig {
 func NewGinZapwriteSyncer() io.Writer {
 
 	lumberJackLogger := &lumberjack.Logger{
-		Filename:   "./log/zap.log",
+		Filename:   "server.log",
 		MaxSize:    10,
 		MaxBackups: 5,
 		MaxAge:     30,

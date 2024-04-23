@@ -7,8 +7,8 @@ import (
 
 	"go.uber.org/zap"
 
-	db "git.virjar.com/Junhiee/anilismei/database"
-	"git.virjar.com/Junhiee/anilismei/database/models"
+	models "git.virjar.com/Junhiee/anilismei/internal/models/sqlc"
+	db "git.virjar.com/Junhiee/anilismei/pkg/db"
 	"git.virjar.com/Junhiee/anilismei/pkg/log"
 )
 

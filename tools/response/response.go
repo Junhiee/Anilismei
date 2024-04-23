@@ -1,8 +1,9 @@
 package response
 
 import (
-	"git.virjar.com/Junhiee/anilismei/pkg/e"
 	"github.com/gin-gonic/gin"
+
+	e "git.virjar.com/Junhiee/anilismei/pkg/errors"
 )
 
 func Response(ctx *gin.Context, HttpCode, errCode int, data interface{}) {

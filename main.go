@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"time"
 
-	db "git.virjar.com/Junhiee/anilismei/database"
+	"git.virjar.com/Junhiee/anilismei/internal/router"
 	"git.virjar.com/Junhiee/anilismei/pkg/config"
+	db "git.virjar.com/Junhiee/anilismei/pkg/db"
 	"git.virjar.com/Junhiee/anilismei/pkg/log"
-	"git.virjar.com/Junhiee/anilismei/router"
 )
 
 func main() {

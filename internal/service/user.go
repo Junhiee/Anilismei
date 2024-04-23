@@ -3,11 +3,12 @@ package service
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"go.uber.org/zap"
 
-	db "git.virjar.com/Junhiee/anilismei/database"
-	"git.virjar.com/Junhiee/anilismei/database/models"
+	models "git.virjar.com/Junhiee/anilismei/internal/models/sqlc"
+	db "git.virjar.com/Junhiee/anilismei/pkg/db"
 	"git.virjar.com/Junhiee/anilismei/pkg/log"
 )
 
@@ -70,6 +71,7 @@ func (s *UserService) GetUser(user_id int64) (models.User, error) {
 	if err != nil {
 		log.ZLOG.Error("DB GetUser Err", zap.Error(err))
 	}
-
+	fmt.Println("-----------------")
+	fmt.Println(res)
 	return res, err
 }

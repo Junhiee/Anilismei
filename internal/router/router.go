@@ -6,8 +6,8 @@ import (
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 
+	"git.virjar.com/Junhiee/anilismei/internal/router/api/beta"
 	"git.virjar.com/Junhiee/anilismei/pkg/log"
-	"git.virjar.com/Junhiee/anilismei/router/api/beta"
 )
 
 type RoterGroup struct {

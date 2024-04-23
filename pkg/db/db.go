@@ -1,4 +1,4 @@
-package database
+package db
 
 import (
 	"database/sql"
@@ -7,11 +7,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 
-	"git.virjar.com/Junhiee/anilismei/database/models"
+	_db "git.virjar.com/Junhiee/anilismei/internal/models/sqlc"
 	"git.virjar.com/Junhiee/anilismei/pkg/log"
 )
 
-var G_QRY *models.Store
+var G_QRY *_db.Store
 
 func SetupMysql() {
 	dsn := "root:123456@tcp(127.0.0.1:3306)/anilismei?parseTime=true"
@@ -24,5 +24,5 @@ func SetupMysql() {
 	db.SetMaxOpenConns(64)
 	db.SetMaxIdleConns(64)
 	db.SetConnMaxLifetime(5 * time.Minute)
-	G_QRY = models.NewStore(db)
+	G_QRY = _db.NewStore(db)
 }

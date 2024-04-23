@@ -6,27 +6,29 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"git.virjar.com/Junhiee/anilismei/pkg/e"
-	s "git.virjar.com/Junhiee/anilismei/service"
-	resp "git.virjar.com/Junhiee/anilismei/utils/response"
+	s "git.virjar.com/Junhiee/anilismei/internal/service"
+	e "git.virjar.com/Junhiee/anilismei/pkg/errors"
+	resp "git.virjar.com/Junhiee/anilismei/tools/response"
 )
 
 type UserRouter struct{}
 
 type GetUserRequest struct {
-	UserID int64 `form:"user_id" binding:"required"`
+	UserID int64 `uri:"user_id" binding:"required"`
 }
 
 func (u *UserRouter) GetUser(ctx *gin.Context) {
 
 	var req GetUserRequest
 
-	if err := ctx.ShouldBindQuery(&req); err != nil {
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		fmt.Println(err)
 		resp.Response(ctx, http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
 
 	data, err := s.Server.GetUser(req.UserID)
+
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -42,7 +44,7 @@ func (u *UserRouter) GetUser(ctx *gin.Context) {
 func (u *UserRouter) AddUser(ctx *gin.Context) {
 	data := s.User{
 		// UserID:    10001,
-		UserName:  "Junhiee",
+		UserName:  "Jack",
 		Email:     "dasuaige68@gmail.com",
 		UserPwd:   "123456",
 		AvatarUrl: "http://avataurl.example.com",

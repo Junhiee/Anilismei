@@ -10,7 +10,7 @@ database = "anilisme"
 port = 8081
 
 [log]
-filename = "./temp/server.log"  # 日志文件输出位置
+filename = "server.log"  # 日志文件输出位置
 maxsize = 10                # 文件最大缓存
 maxbackup = 5   
 maxage = 30
