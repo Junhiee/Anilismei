@@ -71,7 +71,6 @@ func (s *UserService) GetUser(user_id int64) (models.User, error) {
 	if err != nil {
 		log.ZLOG.Error("DB GetUser Err", zap.Error(err))
 	}
-	fmt.Println("-----------------")
 	fmt.Println(res)
 	return res, err
 }
