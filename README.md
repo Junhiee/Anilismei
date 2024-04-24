@@ -1,6 +1,36 @@
-TODO:user table
-TODO:Login Api
-TODO:Token Jwt and other security
-TODO:DataBase TX DeadLock
+- [ ] Gin
 
-https://cloud.tencent.com/developer/user/10002156
+  - [ ] router
+
+  - [ ] model
+
+  - [ ] service
+
+  - [ ] middleware
+
+  - [ ] handler
+
+  - [ ] Graceful restart or stop
+
+- [ ] pkg
+
+  - [ ] testify
+
+  - [ ] errors
+
+  - [ ] log
+
+  - [ ] config
+
+  - [ ] cache
+
+  - [ ] validator
+
+  - [ ] jwt
+
+  - [ ] session
+
+  - [ ] db
+
+- [x] layout
+
