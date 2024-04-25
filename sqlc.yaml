@@ -1,12 +1,12 @@
 version: "2"
 sql:
-- schema: "/database/migration/schema.sql"
-  queries: "/database/query/"
+- schema: "/internal/models/sqlc/schema/"
+  queries: "/internal/models/sqlc/query/"
   engine: "mysql"
   gen:
     go: 
       package: "models"
-      out: "/database/models"
+      out: "/internal/models/sqlc/"
       sql_package: "database/sql"
       emit_json_tags: true
       emit_interface: true

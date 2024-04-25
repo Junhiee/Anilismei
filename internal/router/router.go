@@ -6,8 +6,8 @@ import (
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 
-	"git.virjar.com/Junhiee/anilismei/internal/router/api/beta"
-	"git.virjar.com/Junhiee/anilismei/pkg/log"
+	"github.com/Junhiee/anilismei/internal/router/api/beta"
+	"github.com/Junhiee/anilismei/pkg/log"
 )
 
 type RoterGroup struct {
@@ -17,11 +17,11 @@ type RoterGroup struct {
 
 var RoterGroups = new(RoterGroup)
 
-func Routers() *gin.Engine {
+func InitRouters() *gin.Engine {
 	router := gin.New()
 
 	router.Use(ginzap.Ginzap(log.ZLOG, time.RFC3339, true))
-	router.Use(ginzap.RecoveryWithZap(log.ZLOG, true))
+	// router.Use(ginzap.RecoveryWithZap(log.ZLOG, true))
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 

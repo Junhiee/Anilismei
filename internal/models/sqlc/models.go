@@ -56,11 +56,11 @@ func (ns NullAnimationsAnimeStatus) Value() (driver.Value, error) {
 
 type Animation struct {
 	AnimeID     int64                     `json:"anime_id"`
+	GenreID     int32                     `json:"genre_id"`
+	StudioID    int32                     `json:"studio_id"`
 	Title       string                    `json:"title"`
 	Evaluate    string                    `json:"evaluate"`
-	GenreID     int32                     `json:"genre_id"`
 	ReleaseDate sql.NullTime              `json:"release_date"`
-	StudioID    int32                     `json:"studio_id"`
 	AnimeStatus NullAnimationsAnimeStatus `json:"anime_status"`
 	Rating      sql.NullFloat64           `json:"rating"`
 }

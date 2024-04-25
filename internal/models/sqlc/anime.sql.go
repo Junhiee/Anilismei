@@ -11,17 +11,17 @@ import (
 )
 
 const addAnime = `-- name: AddAnime :exec
-INSERT INTO animations(anime_id, title, evaluate, genre_id, release_date, studio_id, anime_status, rating)
+INSERT INTO animations(anime_id, genre_id, studio_id, title, evaluate , release_date, anime_status, rating)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 `
 
 type AddAnimeParams struct {
 	AnimeID     int64                     `json:"anime_id"`
+	GenreID     int32                     `json:"genre_id"`
+	StudioID    int32                     `json:"studio_id"`
 	Title       string                    `json:"title"`
 	Evaluate    string                    `json:"evaluate"`
-	GenreID     int32                     `json:"genre_id"`
 	ReleaseDate sql.NullTime              `json:"release_date"`
-	StudioID    int32                     `json:"studio_id"`
 	AnimeStatus NullAnimationsAnimeStatus `json:"anime_status"`
 	Rating      sql.NullFloat64           `json:"rating"`
 }
@@ -29,11 +29,11 @@ type AddAnimeParams struct {
 func (q *Queries) AddAnime(ctx context.Context, arg AddAnimeParams) error {
 	_, err := q.db.ExecContext(ctx, addAnime,
 		arg.AnimeID,
+		arg.GenreID,
+		arg.StudioID,
 		arg.Title,
 		arg.Evaluate,
-		arg.GenreID,
 		arg.ReleaseDate,
-		arg.StudioID,
 		arg.AnimeStatus,
 		arg.Rating,
 	)
@@ -51,7 +51,7 @@ func (q *Queries) DeleteAnime(ctx context.Context, animeID int64) error {
 }
 
 const getAnime = `-- name: GetAnime :one
-SELECT anime_id, title, evaluate, genre_id, release_date, studio_id, anime_status, rating FROM animations
+SELECT anime_id, genre_id, studio_id, title, evaluate, release_date, anime_status, rating FROM animations
 WHERE anime_id = ?
 `
 
@@ -60,11 +60,11 @@ func (q *Queries) GetAnime(ctx context.Context, animeID int64) (Animation, error
 	var i Animation
 	err := row.Scan(
 		&i.AnimeID,
+		&i.GenreID,
+		&i.StudioID,
 		&i.Title,
 		&i.Evaluate,
-		&i.GenreID,
 		&i.ReleaseDate,
-		&i.StudioID,
 		&i.AnimeStatus,
 		&i.Rating,
 	)
@@ -72,7 +72,7 @@ func (q *Queries) GetAnime(ctx context.Context, animeID int64) (Animation, error
 }
 
 const getListAnimes = `-- name: GetListAnimes :many
-SELECT anime_id, title, evaluate, genre_id, release_date, studio_id, anime_status, rating FROM animations 
+SELECT anime_id, genre_id, studio_id, title, evaluate, release_date, anime_status, rating FROM animations 
 LIMIT ? OFFSET ?
 `
 
@@ -92,11 +92,11 @@ func (q *Queries) GetListAnimes(ctx context.Context, arg GetListAnimesParams) ([
 		var i Animation
 		if err := rows.Scan(
 			&i.AnimeID,
+			&i.GenreID,
+			&i.StudioID,
 			&i.Title,
 			&i.Evaluate,
-			&i.GenreID,
 			&i.ReleaseDate,
-			&i.StudioID,
 			&i.AnimeStatus,
 			&i.Rating,
 		); err != nil {
@@ -115,16 +115,16 @@ func (q *Queries) GetListAnimes(ctx context.Context, arg GetListAnimesParams) ([
 
 const updateAnime = `-- name: UpdateAnime :exec
 UPDATE animations
-SET title = ?, evaluate = ?, genre_id = ?, release_date = ?, studio_id = ?, anime_status = ?, rating = ?
+SET genre_id = ?, studio_id = ?, title = ?, evaluate = ?, release_date = ?, anime_status = ?, rating = ?
 WHERE anime_id = ?
 `
 
 type UpdateAnimeParams struct {
+	GenreID     int32                     `json:"genre_id"`
+	StudioID    int32                     `json:"studio_id"`
 	Title       string                    `json:"title"`
 	Evaluate    string                    `json:"evaluate"`
-	GenreID     int32                     `json:"genre_id"`
 	ReleaseDate sql.NullTime              `json:"release_date"`
-	StudioID    int32                     `json:"studio_id"`
 	AnimeStatus NullAnimationsAnimeStatus `json:"anime_status"`
 	Rating      sql.NullFloat64           `json:"rating"`
 	AnimeID     int64                     `json:"anime_id"`
@@ -132,11 +132,11 @@ type UpdateAnimeParams struct {
 
 func (q *Queries) UpdateAnime(ctx context.Context, arg UpdateAnimeParams) error {
 	_, err := q.db.ExecContext(ctx, updateAnime,
+		arg.GenreID,
+		arg.StudioID,
 		arg.Title,
 		arg.Evaluate,
-		arg.GenreID,
 		arg.ReleaseDate,
-		arg.StudioID,
 		arg.AnimeStatus,
 		arg.Rating,
 		arg.AnimeID,

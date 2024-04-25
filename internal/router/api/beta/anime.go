@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	s "git.virjar.com/Junhiee/anilismei/internal/service"
-	e "git.virjar.com/Junhiee/anilismei/pkg/errors"
-	resp "git.virjar.com/Junhiee/anilismei/tools/response"
+	s "github.com/Junhiee/anilismei/internal/service"
+	e "github.com/Junhiee/anilismei/pkg/errors"
+	r "github.com/Junhiee/anilismei/pkg/resp"
 )
 
 type AnimeRouter struct{}
@@ -24,7 +24,7 @@ func (a *AnimeRouter) GetListAnimes(ctx *gin.Context) {
 	var req GetListRequest
 
 	if err := ctx.ShouldBindQuery(&req); err != nil {
-		resp.Response(ctx, http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		ctx.JSON(http.StatusBadRequest, r.Response(e.INVALID_PARAMS, nil))
 		return
 	}
 
@@ -33,12 +33,11 @@ func (a *AnimeRouter) GetListAnimes(ctx *gin.Context) {
 		fmt.Println(err)
 	}
 
-	resp.Response(
-		ctx,
+	ctx.JSON(
 		http.StatusOK,
-		e.SUCCESS,
-		data,
+		r.Response(e.SUCCESS, data),
 	)
+
 }
 
 type GetAnimeRequest struct {
@@ -49,17 +48,19 @@ func (a *AnimeRouter) GetAnime(ctx *gin.Context) {
 
 	var req GetAnimeRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		resp.Response(ctx, http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		ctx.JSON(http.StatusBadRequest, r.ErrResponse(e.INVALID_PARAMS, err.Error()))
 		return
 	}
 
-	data, _ := s.Server.GetAnime(req.AnimeID)
+	data, err := s.Server.GetAnime(req.AnimeID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, r.ErrResponse(e.ERROR_DB, err.Error()))
+		return
+	}
 
-	resp.Response(
-		ctx,
+	ctx.JSON(
 		http.StatusOK,
-		e.SUCCESS,
-		data,
+		r.Response(e.SUCCESS, data),
 	)
 }
 
@@ -78,20 +79,13 @@ func (a *AnimeRouter) AddAnime(ctx *gin.Context) {
 	err := s.Server.AddAnime(data)
 
 	if err != nil {
-		resp.Response(
-			ctx,
-			http.StatusBadRequest,
-			e.ERROR_DB,
-			nil,
-		)
+		ctx.JSON(http.StatusBadRequest, r.Response(e.INVALID_PARAMS, nil))
 		return
 	}
 
-	resp.Response(
-		ctx,
+	ctx.JSON(
 		http.StatusOK,
-		e.SUCCESS,
-		data,
+		r.Response(e.SUCCESS, data),
 	)
 
 }

@@ -2,15 +2,16 @@
 CREATE TABLE `animations` (
 	-- 主键
 	`anime_id` BIGINT NOT NULL AUTO_INCREMENT UNIQUE,
+	-- 动画类型表id
+	`genre_id` INT NOT NULL,
+	-- 制作公司表id
+	`studio_id` INT NOT NULL,
 	-- 标题
 	`title` VARCHAR(255) NOT NULL,
 	-- 简介
 	`evaluate` TEXT(65535) NOT NULL,
-	-- 外键-动画类型表
-	`genre_id` INT NOT NULL,
 	-- 更新日期
 	`release_date` TIMESTAMP,
-	`studio_id` INT NOT NULL,
 	`anime_status` ENUM("airing", "completed", "paused"),
 	-- 评分
 	`rating` FLOAT,

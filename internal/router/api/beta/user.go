@@ -6,9 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	s "git.virjar.com/Junhiee/anilismei/internal/service"
-	e "git.virjar.com/Junhiee/anilismei/pkg/errors"
-	resp "git.virjar.com/Junhiee/anilismei/tools/response"
+	s "github.com/Junhiee/anilismei/internal/service"
+	e "github.com/Junhiee/anilismei/pkg/errors"
+	r "github.com/Junhiee/anilismei/pkg/resp"
 )
 
 type UserRouter struct{}
@@ -23,7 +23,7 @@ func (u *UserRouter) GetUser(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		fmt.Println(err)
-		resp.Response(ctx, http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		ctx.JSON(http.StatusBadRequest, r.Response(e.INVALID_PARAMS, nil))
 		return
 	}
 
@@ -33,12 +33,7 @@ func (u *UserRouter) GetUser(ctx *gin.Context) {
 		fmt.Println(err)
 	}
 
-	resp.Response(
-		ctx,
-		http.StatusOK,
-		e.SUCCESS,
-		data,
-	)
+	ctx.JSON(http.StatusOK, r.Response(e.SUCCESS, data))
 }
 
 func (u *UserRouter) AddUser(ctx *gin.Context) {
@@ -53,20 +48,10 @@ func (u *UserRouter) AddUser(ctx *gin.Context) {
 	err := s.Server.AddUser(data)
 
 	if err != nil {
-		resp.Response(
-			ctx,
-			http.StatusBadRequest,
-			e.ERROR_DB,
-			nil,
-		)
+		ctx.JSON(http.StatusBadRequest, r.Response(e.ERROR_DB, nil))
 		return
 	}
 
-	resp.Response(
-		ctx,
-		http.StatusOK,
-		e.SUCCESS,
-		data,
-	)
+	ctx.JSON(http.StatusOK, r.Response(e.SUCCESS, nil))
 
 }

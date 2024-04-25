@@ -7,12 +7,12 @@ SELECT * FROM animations
 WHERE anime_id = ?;
 
 -- name: AddAnime :exec
-INSERT INTO animations(anime_id, title, evaluate, genre_id, release_date, studio_id, anime_status, rating)
+INSERT INTO animations(anime_id, genre_id, studio_id, title, evaluate , release_date, anime_status, rating)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 
 -- name: UpdateAnime :exec
 UPDATE animations
-SET title = ?, evaluate = ?, genre_id = ?, release_date = ?, studio_id = ?, anime_status = ?, rating = ?
+SET genre_id = ?, studio_id = ?, title = ?, evaluate = ?, release_date = ?, anime_status = ?, rating = ?
 WHERE anime_id = ?;
 
 -- name: DeleteAnime :exec

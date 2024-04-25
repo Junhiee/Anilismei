@@ -7,9 +7,9 @@ import (
 
 	"go.uber.org/zap"
 
-	models "git.virjar.com/Junhiee/anilismei/internal/models/sqlc"
-	db "git.virjar.com/Junhiee/anilismei/pkg/db"
-	"git.virjar.com/Junhiee/anilismei/pkg/log"
+	models "github.com/Junhiee/anilismei/internal/models/sqlc"
+	db "github.com/Junhiee/anilismei/pkg/db"
+	"github.com/Junhiee/anilismei/pkg/log"
 )
 
 type AnimeService struct{}

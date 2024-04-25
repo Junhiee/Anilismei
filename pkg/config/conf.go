@@ -1,9 +1,10 @@
 package config
 
 import (
-	"git.virjar.com/Junhiee/anilismei/pkg/log"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+
+	"github.com/Junhiee/anilismei/pkg/log"
 )
 
 type DateBase struct{}
