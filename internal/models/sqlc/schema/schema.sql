@@ -8,11 +8,17 @@ CREATE TABLE `animations` (
 	`studio_id` INT NOT NULL,
 	-- 标题
 	`title` VARCHAR(255) NOT NULL,
+	`country` VARCHAR(255) NOT NULL,
+	-- 图片
+	`image_url` VARCHAR(255),
 	-- 简介
-	`evaluate` TEXT(65535) NOT NULL,
+	`evaluate` TEXT(65535),
 	-- 更新日期
+	`update_time` TIMESTAMP,
+	-- 发布日期
 	`release_date` TIMESTAMP,
-	`anime_status` ENUM("airing", "completed", "paused"),
+	-- 动画类型
+	`anime_status` ENUM("coming soon", "airing", "completed", "paused"),
 	-- 评分
 	`rating` FLOAT,
 	PRIMARY KEY(`anime_id`)
@@ -32,6 +38,16 @@ CREATE TABLE `genres` (
 
 CREATE INDEX `genre_id_index`
 ON `genres` (`genre_id`);
+
+/* 动画信息-动画类型关联表*/
+CREATE TABLE animation_genres (
+    `anime_id` BIGINT,
+    `genre_id` INT,
+    PRIMARY KEY (`anime_id`, `genre_id`),
+    FOREIGN KEY (`anime_id`) REFERENCES animations(`anime_id`),
+    FOREIGN KEY (`genre_id`) REFERENCES genres(`genre_id`)
+);
+
 /* 制作公司 */
 CREATE TABLE `studios` (
 	`studio_id` INT NOT NULL AUTO_INCREMENT UNIQUE,
@@ -43,17 +59,7 @@ CREATE TABLE `studios` (
 
 CREATE INDEX `studio_id_index`
 ON `studios` (`studio_id`);
-/* 动画信息图片表 */
-CREATE TABLE `images` (
-	`image_id` BIGINT NOT NULL AUTO_INCREMENT UNIQUE,
-	`anime_id` BIGINT NOT NULL,
-	`image_url` VARCHAR(255) NOT NULL,
-	PRIMARY KEY(`image_id`)
-);
 
-
-CREATE INDEX `anime_id_index`
-ON `images` (`anime_id`);
 /* 用户表 */
 CREATE TABLE `users` (
 	`user_id` BIGINT NOT NULL AUTO_INCREMENT UNIQUE,

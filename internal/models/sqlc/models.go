@@ -14,9 +14,10 @@ import (
 type AnimationsAnimeStatus string
 
 const (
-	AnimationsAnimeStatusAiring    AnimationsAnimeStatus = "airing"
-	AnimationsAnimeStatusCompleted AnimationsAnimeStatus = "completed"
-	AnimationsAnimeStatusPaused    AnimationsAnimeStatus = "paused"
+	AnimationsAnimeStatusComingsoon AnimationsAnimeStatus = "coming soon"
+	AnimationsAnimeStatusAiring     AnimationsAnimeStatus = "airing"
+	AnimationsAnimeStatusCompleted  AnimationsAnimeStatus = "completed"
+	AnimationsAnimeStatusPaused     AnimationsAnimeStatus = "paused"
 )
 
 func (e *AnimationsAnimeStatus) Scan(src interface{}) error {
@@ -59,10 +60,18 @@ type Animation struct {
 	GenreID     int32                     `json:"genre_id"`
 	StudioID    int32                     `json:"studio_id"`
 	Title       string                    `json:"title"`
-	Evaluate    string                    `json:"evaluate"`
+	Country     string                    `json:"country"`
+	ImageUrl    sql.NullString            `json:"image_url"`
+	Evaluate    sql.NullString            `json:"evaluate"`
+	UpdateTime  sql.NullTime              `json:"update_time"`
 	ReleaseDate sql.NullTime              `json:"release_date"`
 	AnimeStatus NullAnimationsAnimeStatus `json:"anime_status"`
 	Rating      sql.NullFloat64           `json:"rating"`
+}
+
+type AnimationGenre struct {
+	AnimeID sql.NullInt32 `json:"anime_id"`
+	GenreID sql.NullInt32 `json:"genre_id"`
 }
 
 type Comment struct {
@@ -75,12 +84,6 @@ type Comment struct {
 type Genre struct {
 	GenreID   int32  `json:"genre_id"`
 	GenreName string `json:"genre_name"`
-}
-
-type Image struct {
-	ImageID  int64  `json:"image_id"`
-	AnimeID  int64  `json:"anime_id"`
-	ImageUrl string `json:"image_url"`
 }
 
 type Studio struct {

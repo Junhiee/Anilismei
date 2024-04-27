@@ -1,20 +1,12 @@
--- name: GetListAnimes :many
-SELECT * FROM animations 
-LIMIT ? OFFSET ?;
-
 -- name: GetAnime :one
 SELECT * FROM animations
 WHERE anime_id = ?;
 
+-- name: GetListAnimes :many
+SELECT * FROM animations
+ORDER BY update_time
+LIMIT ? OFFSET ?;
+
 -- name: AddAnime :exec
-INSERT INTO animations(anime_id, genre_id, studio_id, title, evaluate , release_date, anime_status, rating)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-
--- name: UpdateAnime :exec
-UPDATE animations
-SET genre_id = ?, studio_id = ?, title = ?, evaluate = ?, release_date = ?, anime_status = ?, rating = ?
-WHERE anime_id = ?;
-
--- name: DeleteAnime :exec
-DELETE FROM animations
-WHERE anime_id = ?;
+INSERT INTO animations(anime_id, genre_id, studio_id, title, country, image_url, evaluate, update_time, release_date, anime_status, rating)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);

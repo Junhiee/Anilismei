@@ -11,8 +11,8 @@ import (
 )
 
 const addAnime = `-- name: AddAnime :exec
-INSERT INTO animations(anime_id, genre_id, studio_id, title, evaluate , release_date, anime_status, rating)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+INSERT INTO animations(anime_id, genre_id, studio_id, title, country, image_url, evaluate, update_time, release_date, anime_status, rating)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 
 type AddAnimeParams struct {
@@ -20,7 +20,10 @@ type AddAnimeParams struct {
 	GenreID     int32                     `json:"genre_id"`
 	StudioID    int32                     `json:"studio_id"`
 	Title       string                    `json:"title"`
-	Evaluate    string                    `json:"evaluate"`
+	Country     string                    `json:"country"`
+	ImageUrl    sql.NullString            `json:"image_url"`
+	Evaluate    sql.NullString            `json:"evaluate"`
+	UpdateTime  sql.NullTime              `json:"update_time"`
 	ReleaseDate sql.NullTime              `json:"release_date"`
 	AnimeStatus NullAnimationsAnimeStatus `json:"anime_status"`
 	Rating      sql.NullFloat64           `json:"rating"`
@@ -32,7 +35,10 @@ func (q *Queries) AddAnime(ctx context.Context, arg AddAnimeParams) error {
 		arg.GenreID,
 		arg.StudioID,
 		arg.Title,
+		arg.Country,
+		arg.ImageUrl,
 		arg.Evaluate,
+		arg.UpdateTime,
 		arg.ReleaseDate,
 		arg.AnimeStatus,
 		arg.Rating,
@@ -40,18 +46,8 @@ func (q *Queries) AddAnime(ctx context.Context, arg AddAnimeParams) error {
 	return err
 }
 
-const deleteAnime = `-- name: DeleteAnime :exec
-DELETE FROM animations
-WHERE anime_id = ?
-`
-
-func (q *Queries) DeleteAnime(ctx context.Context, animeID int64) error {
-	_, err := q.db.ExecContext(ctx, deleteAnime, animeID)
-	return err
-}
-
 const getAnime = `-- name: GetAnime :one
-SELECT anime_id, genre_id, studio_id, title, evaluate, release_date, anime_status, rating FROM animations
+SELECT anime_id, genre_id, studio_id, title, country, image_url, evaluate, update_time, release_date, anime_status, rating FROM animations
 WHERE anime_id = ?
 `
 
@@ -63,7 +59,10 @@ func (q *Queries) GetAnime(ctx context.Context, animeID int64) (Animation, error
 		&i.GenreID,
 		&i.StudioID,
 		&i.Title,
+		&i.Country,
+		&i.ImageUrl,
 		&i.Evaluate,
+		&i.UpdateTime,
 		&i.ReleaseDate,
 		&i.AnimeStatus,
 		&i.Rating,
@@ -72,7 +71,8 @@ func (q *Queries) GetAnime(ctx context.Context, animeID int64) (Animation, error
 }
 
 const getListAnimes = `-- name: GetListAnimes :many
-SELECT anime_id, genre_id, studio_id, title, evaluate, release_date, anime_status, rating FROM animations 
+SELECT anime_id, genre_id, studio_id, title, country, image_url, evaluate, update_time, release_date, anime_status, rating FROM animations
+ORDER BY release_date
 LIMIT ? OFFSET ?
 `
 
@@ -95,7 +95,10 @@ func (q *Queries) GetListAnimes(ctx context.Context, arg GetListAnimesParams) ([
 			&i.GenreID,
 			&i.StudioID,
 			&i.Title,
+			&i.Country,
+			&i.ImageUrl,
 			&i.Evaluate,
+			&i.UpdateTime,
 			&i.ReleaseDate,
 			&i.AnimeStatus,
 			&i.Rating,
@@ -111,35 +114,4 @@ func (q *Queries) GetListAnimes(ctx context.Context, arg GetListAnimesParams) ([
 		return nil, err
 	}
 	return items, nil
-}
-
-const updateAnime = `-- name: UpdateAnime :exec
-UPDATE animations
-SET genre_id = ?, studio_id = ?, title = ?, evaluate = ?, release_date = ?, anime_status = ?, rating = ?
-WHERE anime_id = ?
-`
-
-type UpdateAnimeParams struct {
-	GenreID     int32                     `json:"genre_id"`
-	StudioID    int32                     `json:"studio_id"`
-	Title       string                    `json:"title"`
-	Evaluate    string                    `json:"evaluate"`
-	ReleaseDate sql.NullTime              `json:"release_date"`
-	AnimeStatus NullAnimationsAnimeStatus `json:"anime_status"`
-	Rating      sql.NullFloat64           `json:"rating"`
-	AnimeID     int64                     `json:"anime_id"`
-}
-
-func (q *Queries) UpdateAnime(ctx context.Context, arg UpdateAnimeParams) error {
-	_, err := q.db.ExecContext(ctx, updateAnime,
-		arg.GenreID,
-		arg.StudioID,
-		arg.Title,
-		arg.Evaluate,
-		arg.ReleaseDate,
-		arg.AnimeStatus,
-		arg.Rating,
-		arg.AnimeID,
-	)
-	return err
 }
