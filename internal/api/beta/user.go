@@ -6,12 +6,20 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	s "github.com/Junhiee/anilismei/internal/service"
+	"github.com/Junhiee/anilismei/internal/service"
 	e "github.com/Junhiee/anilismei/pkg/errors"
 	r "github.com/Junhiee/anilismei/pkg/resp"
 )
 
-type UserRouter struct{}
+type UserRouter struct {
+	userService service.UserService
+}
+
+func NewUserRouter(userService service.UserService) *UserRouter {
+	return &UserRouter{
+		userService: userService,
+	}
+}
 
 type GetUserRequest struct {
 	UserID int64 `uri:"user_id" binding:"required"`
@@ -27,7 +35,7 @@ func (u *UserRouter) GetUser(ctx *gin.Context) {
 		return
 	}
 
-	data, err := s.Server.GetUser(req.UserID)
+	data, err := u.userService.GetUser(req.UserID)
 
 	if err != nil {
 		fmt.Println(err)
@@ -37,7 +45,7 @@ func (u *UserRouter) GetUser(ctx *gin.Context) {
 }
 
 func (u *UserRouter) AddUser(ctx *gin.Context) {
-	data := s.User{
+	data := service.User{
 		// UserID:    10001,
 		UserName:  "Jack",
 		Email:     "dasuaige68@gmail.com",
@@ -45,7 +53,7 @@ func (u *UserRouter) AddUser(ctx *gin.Context) {
 		AvatarUrl: "http://avataurl.example.com",
 	}
 
-	err := s.Server.AddUser(data)
+	err := u.userService.AddUser(data)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, r.Response(e.ERROR_DB, nil))

@@ -6,20 +6,32 @@ import (
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 
-	"github.com/Junhiee/anilismei/internal/router/api/beta"
+	"github.com/Junhiee/anilismei/internal/api/beta"
+	"github.com/Junhiee/anilismei/internal/service"
 	"github.com/Junhiee/anilismei/pkg/log"
 )
 
-type RoterGroup struct {
-	beta.AnimeRouter
-	beta.UserRouter
+// TODO 根据人气排序 -- 用缓存来做
+
+// TODO 筛选出按动画类型分类的结果
+
+// TODO 筛选出按推出日期分类的结果
+
+type RouterGroup struct {
+	AnimeR *beta.AnimeRouter
+	UserR  *beta.UserRouter
 }
 
-var RoterGroups = new(RoterGroup)
+func NewRouterGroup(service *service.Service) *RouterGroup {
+	return &RouterGroup{
+		AnimeR: beta.NewAnimeRouter(service.AnimeSrv),
+		UserR:  beta.NewUserRouter(service.UserSrv),
+	}
+}
 
-func InitRouters() *gin.Engine {
+func InitRouters(service *service.Service) *gin.Engine {
+	beta := NewRouterGroup(service)
 	router := gin.New()
-
 	router.Use(ginzap.Ginzap(log.ZLOG, time.RFC3339, true))
 	// router.Use(ginzap.RecoveryWithZap(log.ZLOG, true))
 	router.Use(gin.Logger())
@@ -27,17 +39,15 @@ func InitRouters() *gin.Engine {
 
 	anime_beta := router.Group("/api/beta/anime")
 	{
-		anime_beta.GET(":anime_id", RoterGroups.GetAnime)
-		anime_beta.GET("/", RoterGroups.GetListAnimes)
-		anime_beta.POST("/", RoterGroups.AddAnime)
-		anime_beta.PUT("/:id", RoterGroups.UpdateAnime)
-		anime_beta.DELETE("/:id", RoterGroups.DeleteAnime)
+		anime_beta.GET("", beta.AnimeR.GetListAnimes)
+		anime_beta.GET(":anime_id", beta.AnimeR.GetAnime)
+
 	}
 
 	user_beta := router.Group("/api/beta/user")
 	{
-		user_beta.GET("/:user_id", RoterGroups.GetUser)
-		user_beta.POST("/", RoterGroups.AddUser)
+		user_beta.GET("/:user_id", beta.UserR.GetUser)
+		user_beta.POST("/", beta.UserR.AddUser)
 
 	}
 	return router

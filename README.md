@@ -14,8 +14,6 @@
 
 - [ ] pkg
 
-  - [ ] testify
-
   - [ ] errors
 
   - [ ] log
@@ -31,6 +29,8 @@
   - [ ] session
 
   - [ ] db
+
+- [ ] MakeFile
 
 - [x] layout
 

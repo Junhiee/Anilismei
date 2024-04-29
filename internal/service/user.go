@@ -8,13 +8,16 @@ import (
 	"go.uber.org/zap"
 
 	models "github.com/Junhiee/anilismei/internal/models/sqlc"
-	db "github.com/Junhiee/anilismei/pkg/db"
 	"github.com/Junhiee/anilismei/pkg/log"
 )
 
-type UserService struct{}
+type userService struct {
+	db *models.Store
+}
 
-var UserServer = new(UserService)
+func NewUserService(db *models.Store) UserService {
+	return &userService{db: db}
+}
 
 type User struct {
 	UserID    int64
@@ -24,7 +27,7 @@ type User struct {
 	AvatarUrl string
 }
 
-func (s *UserService) AddUser(u User) error {
+func (s *userService) AddUser(u User) error {
 	arg := models.AddUserParams{
 		// UserID:    u.UserID,
 		UserName:  u.UserName,
@@ -32,7 +35,7 @@ func (s *UserService) AddUser(u User) error {
 		UserPwd:   u.UserPwd,
 		AvatarUrl: sql.NullString{String: u.AvatarUrl, Valid: true},
 	}
-	err := db.G_QRY.AddUser(context.Background(), arg)
+	err := s.db.AddUser(context.Background(), arg)
 
 	if err != nil {
 		log.ZLOG.Error("DB AddUser Err", zap.Error(err))
@@ -41,7 +44,7 @@ func (s *UserService) AddUser(u User) error {
 	return err
 }
 
-func (s *UserService) UpdateUser(u User) error {
+func (s *userService) UpdateUser(u User) error {
 	arg := models.UpdateUserParams{
 		UserID:    u.UserID,
 		UserName:  u.UserName,
@@ -50,7 +53,7 @@ func (s *UserService) UpdateUser(u User) error {
 		AvatarUrl: sql.NullString{String: u.AvatarUrl, Valid: true},
 	}
 
-	err := db.G_QRY.UpdateUser(context.Background(), arg)
+	err := s.db.UpdateUser(context.Background(), arg)
 	if err != nil {
 		log.ZLOG.Error("DB UpdateUser Err", zap.Error(err))
 	}
@@ -58,16 +61,16 @@ func (s *UserService) UpdateUser(u User) error {
 	return err
 }
 
-func (s *UserService) DeleteUser(user_id int64) error {
-	err := db.G_QRY.DeleteUser(context.Background(), user_id)
+func (s *userService) DeleteUser(user_id int64) error {
+	err := s.db.DeleteUser(context.Background(), user_id)
 	if err != nil {
 		log.ZLOG.Error("DB DeleteUser Err", zap.Error(err))
 	}
 	return err
 }
 
-func (s *UserService) GetUser(user_id int64) (models.User, error) {
-	res, err := db.G_QRY.GetUser(context.Background(), user_id)
+func (s *userService) GetUser(user_id int64) (models.User, error) {
+	res, err := s.db.GetUser(context.Background(), user_id)
 	if err != nil {
 		log.ZLOG.Error("DB GetUser Err", zap.Error(err))
 	}

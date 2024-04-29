@@ -11,19 +11,19 @@ import (
 	"github.com/Junhiee/anilismei/pkg/log"
 )
 
-var G_QRY *_db.Store
+// var G_QRY *_db.Store
 
-func InitMysql() {
+func InitMysql() *_db.Store {
 	dsn := "root:123456@tcp(127.0.0.1:3306)/anilismei?parseTime=true"
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		log.ZLOG.Panic("mysql setup err: ", zap.Error(err))
-		return
+		return nil
 	}
 
 	db.SetMaxOpenConns(64)
 	db.SetMaxIdleConns(64)
 	db.SetConnMaxLifetime(5 * time.Minute)
-	G_QRY = _db.NewStore(db)
-	
+	stroe := _db.NewStore(db)
+	return stroe
 }
