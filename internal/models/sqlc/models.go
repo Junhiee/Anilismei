@@ -70,7 +70,7 @@ type Animation struct {
 }
 
 type AnimationGenre struct {
-	AnimeID sql.NullInt32 `json:"anime_id"`
+	AnimeID sql.NullInt64 `json:"anime_id"`
 	GenreID sql.NullInt32 `json:"genre_id"`
 }
 
