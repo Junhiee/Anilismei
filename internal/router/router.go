@@ -11,12 +11,6 @@ import (
 	"github.com/Junhiee/anilismei/pkg/log"
 )
 
-// TODO 根据人气排序 -- 用缓存来做
-
-// TODO 筛选出按动画类型分类的结果
-
-// TODO 筛选出按推出日期分类的结果
-
 type RouterGroup struct {
 	AnimeR *beta.AnimeRouter
 	UserR  *beta.UserRouter
