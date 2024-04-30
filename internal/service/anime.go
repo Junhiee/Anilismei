@@ -11,8 +11,6 @@ import (
 	"github.com/Junhiee/anilismei/pkg/log"
 )
 
-
-
 type animeService struct {
 	db *models.Store
 }
@@ -67,8 +65,8 @@ func (s *animeService) GetAnimeByID(anime_id int64) (models.Animation, error) {
 	return res, err
 }
 
-// 筛选出按动画类型分类的结果
-func (s *animeService) GetAnimesByCountry(country string, limit int32, offset int32) ([]models.Animation, error) {
+// 筛选出按国家分类的结果
+func (s *animeService) GetAnimesByCountry(country string, limit, offset int32) ([]models.Animation, error) {
 
 	params := models.GetAnimesByCountryParams{
 		Country: country,
@@ -100,9 +98,20 @@ func (s *animeService) GetListAnimes(limit int32, offset int32) ([]models.Animat
 	return res, err
 }
 
-// 根据推出日期获得数据
-func (s *animeService) GetAnimesByRelease() ([]models.Animation, error) {
-	params := models.GetAnimesByReleaseParams{}
+// 根据动画推出日期获得数据
+func (s *animeService) GetAnimesByRelease(release_date time.Time, limit, offset int32) ([]models.Animation, error) {
+
+	var valid bool
+
+	if release_date.IsZero() {
+		valid = false
+	}
+
+	params := models.GetAnimesByReleaseParams{
+		ReleaseDate: sql.NullTime{Time: release_date, Valid: valid},
+		Limit:       limit,
+		Offset:      offset,
+	}
 	res, err := s.db.GetAnimesByRelease(context.Background(), params)
 
 	if err != nil {
@@ -112,12 +121,35 @@ func (s *animeService) GetAnimesByRelease() ([]models.Animation, error) {
 }
 
 // 根据动画类型获得数据
-func (s *animeService) GetAnimesByType() ([]models.AnimationGenre, error) {
-	params := models.GetAnimesByTypeParams{}
-	res, err := s.db.GetAnimesByType(context.Background(), params)
+func (s *animeService) GetAnimesByType(genre_name string, limit, offset int32) ([]models.Animation, error) {
+	genre_id, err := s.db.GetAnimeGenreID(context.Background(), genre_name)
+	if err != nil {
+		log.ZLOG.Error("GetAnimeGenreID err", zap.Error(err))
+	}
 
+	params := models.GetAnimesByTypeParams{
+		GenreID: sql.NullInt32{Int32: genre_id, Valid: true},
+		Limit:   limit,
+		Offset:  offset,
+	}
+	anime_ids, err := s.db.GetAnimesByType(context.Background(), params)
 	if err != nil {
 		log.ZLOG.Error("GetAnimesByType err", zap.Error(err))
 	}
+
+	var aids []int64
+
+	for _, id := range anime_ids {
+		aids = append(aids, id.Int64)
+	}
+
+	res, err := s.db.GetAnimesByIDs(context.Background(), aids)
+	if err != nil {
+		log.ZLOG.Error("GetAnimesByIDs err", zap.Error(err))
+	}
+
 	return res, err
+
 }
+
+// TODO 根据人气排序 -- 用缓存来做
