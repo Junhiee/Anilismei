@@ -6,16 +6,18 @@ package models
 
 import (
 	"context"
+	"database/sql"
 )
 
 type Querier interface {
 	AddUser(ctx context.Context, arg AddUserParams) error
 	DeleteUser(ctx context.Context, userID int64) error
 	GetAnimeByID(ctx context.Context, animeID int64) (Animation, error)
+	GetAnimeGenreID(ctx context.Context, genreName string) (int32, error)
 	GetAnimesByCountry(ctx context.Context, arg GetAnimesByCountryParams) ([]Animation, error)
 	GetAnimesByIDs(ctx context.Context, ids []int64) ([]Animation, error)
 	GetAnimesByRelease(ctx context.Context, arg GetAnimesByReleaseParams) ([]Animation, error)
-	GetAnimesByType(ctx context.Context, arg GetAnimesByTypeParams) ([]AnimationGenre, error)
+	GetAnimesByType(ctx context.Context, arg GetAnimesByTypeParams) ([]sql.NullInt64, error)
 	GetListAnimes(ctx context.Context, arg GetListAnimesParams) ([]Animation, error)
 	GetUser(ctx context.Context, userID int64) (User, error)
 	InsertAnime(ctx context.Context, arg InsertAnimeParams) error

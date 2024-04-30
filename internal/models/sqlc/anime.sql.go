@@ -35,6 +35,18 @@ func (q *Queries) GetAnimeByID(ctx context.Context, animeID int64) (Animation, e
 	return i, err
 }
 
+const getAnimeGenreID = `-- name: GetAnimeGenreID :one
+SELECT genre_id FROM genres
+WHERE genre_name = ?
+`
+
+func (q *Queries) GetAnimeGenreID(ctx context.Context, genreName string) (int32, error) {
+	row := q.db.QueryRowContext(ctx, getAnimeGenreID, genreName)
+	var genre_id int32
+	err := row.Scan(&genre_id)
+	return genre_id, err
+}
+
 const getAnimesByCountry = `-- name: GetAnimesByCountry :many
 SELECT anime_id, genre_id, studio_id, title, country, image_url, evaluate, update_time, release_date, anime_status, rating FROM animations
 WHERE country = ?
@@ -183,7 +195,7 @@ func (q *Queries) GetAnimesByRelease(ctx context.Context, arg GetAnimesByRelease
 }
 
 const getAnimesByType = `-- name: GetAnimesByType :many
-SELECT anime_id, genre_id FROM animation_genres
+SELECT anime_id FROM animation_genres
 WHERE genre_id = ?
 LIMIT ? OFFSET ?
 `
@@ -194,19 +206,19 @@ type GetAnimesByTypeParams struct {
 	Offset  int32         `json:"offset"`
 }
 
-func (q *Queries) GetAnimesByType(ctx context.Context, arg GetAnimesByTypeParams) ([]AnimationGenre, error) {
+func (q *Queries) GetAnimesByType(ctx context.Context, arg GetAnimesByTypeParams) ([]sql.NullInt64, error) {
 	rows, err := q.db.QueryContext(ctx, getAnimesByType, arg.GenreID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []AnimationGenre{}
+	items := []sql.NullInt64{}
 	for rows.Next() {
-		var i AnimationGenre
-		if err := rows.Scan(&i.AnimeID, &i.GenreID); err != nil {
+		var anime_id sql.NullInt64
+		if err := rows.Scan(&anime_id); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, anime_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

@@ -65,4 +65,4 @@ func TestGetAnimeByID(t *testing.T) {
 	require.NoError(t, err)
 }
 
-// TODO 4. GetListAnimes test
+// TODO DB GetListAnime Test

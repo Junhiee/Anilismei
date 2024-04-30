@@ -1,4 +1,4 @@
 package models
 
-// TODO 1. sql transaction
-// TODO 2. store_test
+// TODO DB sql transaction
+// TODO DB store_test

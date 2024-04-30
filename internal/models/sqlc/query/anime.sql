@@ -25,9 +25,13 @@ ORDER BY update_time DESC
 LIMIT ? OFFSET ?;
 
 -- name: GetAnimesByType :many
-SELECT * FROM animation_genres
+SELECT anime_id FROM animation_genres
 WHERE genre_id = ?
 LIMIT ? OFFSET ?;
+
+-- name: GetAnimeGenreID :one
+SELECT genre_id FROM genres
+WHERE genre_name = ?;
 
 -- name: InsertAnime :exec
 INSERT INTO animations(anime_id, genre_id, studio_id, title, country, image_url, evaluate, update_time,
